@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "extends": ["@react-native-community", "eslint-plugin-no-inline-styles"],
+  "rules": {
+    "no-inline-styles/no-inline-styles": 2
+  },
+  "env": {
+    "browser": true
+  }
+}
