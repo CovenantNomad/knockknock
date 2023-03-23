@@ -1,0 +1,21 @@
+export const FONT_SIZE = {
+  DISPLAY: 34,
+  HEADING_1: 28,
+  HEADING_2: 24,
+  HEADING_3: 20,
+  BODY: 17,
+  CALLOUT: 15,
+  FOOTNOTE: 13,
+  SMALLTEXT: 12,
+};
+
+export const LINE_HEIGHT = {
+  DISPLAY: 41,
+  HEADING_1: 34,
+  HEADING_2: 28,
+  HEADING_3: 25,
+  BODY: 22,
+  CALLOUT: 21,
+  FOOTNOTE: 18,
+  SMALLTEXT: 17,
+};
