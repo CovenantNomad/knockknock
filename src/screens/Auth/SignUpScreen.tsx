@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.CALLOUT,
     paddingVertical: 12,
     marginLeft: 12,
+    padding: 0,
   },
 });
 

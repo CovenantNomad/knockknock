@@ -8,11 +8,18 @@ interface HeaderTitleProps {
 }
 
 const HeaderTitle = ({ children }: HeaderTitleProps) => {
-  return <Text style={styles.text}>{children}</Text>;
+  return (
+    <View style={styles.center}>
+      <Text style={styles.headerTitle}>{children}</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  text: {
+  center: {
+    flex: 3,
+  },
+  headerTitle: {
     fontSize: FONT_SIZE.HEADING_3,
     lineHeight: LINE_HEIGHT.HEADING_3,
     color: OpenColor.black,

@@ -10,8 +10,9 @@ interface AppLayoutProps {
 const AppLayout = ({ children, backgroundColor }: AppLayoutProps) => {
   return (
     <SafeAreaView
-      style={[styles.layout, { backgroundColor }]}
-      edges={['top', 'right', 'bottom', 'left']}>
+      style={[styles.layout, { backgroundColor: backgroundColor }]}
+      edges={['top', 'right', 'left']}
+    >
       {children}
     </SafeAreaView>
   );

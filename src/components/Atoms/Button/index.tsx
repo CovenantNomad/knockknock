@@ -12,6 +12,7 @@ const Button: React.FC<{
   textColor?: string;
   disabled?: boolean;
   isLoading?: boolean;
+  rounded?: boolean;
   backgroundColor?: string;
   onPress: () => void;
 }> = props => {
@@ -20,7 +21,10 @@ const Button: React.FC<{
       {...props}
       style={[
         styles.button,
-        { backgroundColor: props.backgroundColor || OpenColor.blue[6] },
+        {
+          backgroundColor: props.backgroundColor || OpenColor.blue[6],
+          borderRadius: props.rounded ? 12 : 0,
+        },
       ]}
       onPress={props.onPress}
       disabled={props.disabled}
@@ -44,7 +48,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
-    borderRadius: 12,
   },
   label: {
     fontSize: 16,

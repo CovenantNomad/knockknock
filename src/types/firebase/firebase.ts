@@ -10,3 +10,10 @@ export enum COLLCTION {
   SETTINGS = 'Settings',
   REMINDERS = 'Reminders',
 }
+
+export interface updateDailyRoutineByIdProp {
+  uid: string;
+  date: dayjs.Dayjs;
+  routineId: string;
+  completed: boolean;
+}

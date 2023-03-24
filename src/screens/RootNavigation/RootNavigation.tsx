@@ -5,7 +5,7 @@ import { RootStackParamList } from '@/types/navigations/navigationTypes';
 import SignInScreen from '../Auth/SignInScreen';
 import SignUpScreen from '../Auth/SignUpScreen';
 import AuthContext from '@/stores/AuthContext';
-import HomeNavigation from '../Apps/Home/HomeNavigation';
+import AppNavigation from '../Apps/AppNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -15,7 +15,7 @@ const RootNavigation = () => {
 
   const renderRootStack = useCallback(() => {
     if (userInfo !== null && !isSignInLoading && !isSignUpLoading) {
-      return <Stack.Screen name="App" component={HomeNavigation} />;
+      return <Stack.Screen name="App" component={AppNavigation} />;
     }
 
     return (

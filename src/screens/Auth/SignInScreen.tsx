@@ -14,10 +14,10 @@ import { emailRegExp, moveToNext } from '@/utils/utils';
 import OpenColor from 'open-color';
 import DisplayText from '@/components/Atoms/Typography/DisplayText';
 import ErrorText from '@/components/Atoms/Typography/ErrorText';
-import TitleText from '@/components/Atoms/Typography/TitleText';
 import LinkText from '@/components/Atoms/Typography/LinkText';
 import Button from '@/components/Atoms/Button';
-import { FONT_SIZE, LINE_HEIGHT } from '@/styles/font';
+import { FONT_SIZE } from '@/styles/font';
+import AppTitleText from '@/components/Atoms/Typography/AppTitleText';
 
 interface SignInScreenProps {}
 
@@ -51,7 +51,7 @@ const SignInScreen = ({}: SignInScreenProps) => {
       <KeyboardAvoidingViewContainer>
         <>
           <Margin space={96} />
-          <TitleText>Knock Knock</TitleText>
+          <AppTitleText>Knock Knock</AppTitleText>
           <DisplayText>{'주님과 나의 약속시간'}</DisplayText>
           <Margin space={42} />
           <View style={styles.TextInputContainer}>
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.CALLOUT,
     paddingVertical: 12,
     marginLeft: 12,
+    padding: 0,
   },
 });
 
