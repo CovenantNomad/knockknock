@@ -1,3 +1,4 @@
+import { FirebaseRoutineType } from '@/types/routines/routineType';
 import dayjs from 'dayjs';
 
 export const getCalendarStripColumns = (now: dayjs.Dayjs) => {
@@ -47,3 +48,8 @@ export const getMonthText = (month: number) => {
 export const getDayColor = (day: number) => {
   return day === 0 ? '#e67639' : day === 6 ? '#5872d1' : '#2b2b2b';
 };
+
+export const sortByDateTime = (
+  a: FirebaseRoutineType,
+  b: FirebaseRoutineType,
+) => Number(a.hour) - Number(b.hour) || Number(a.minute) - Number(b.minute);

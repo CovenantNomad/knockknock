@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigations/navigationTypes';
-
+//components
 import SignInScreen from '../Auth/SignInScreen';
 import SignUpScreen from '../Auth/SignUpScreen';
 import AuthContext from '@/stores/AuthContext';

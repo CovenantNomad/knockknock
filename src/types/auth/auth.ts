@@ -16,3 +16,9 @@ export interface User {
   email: string;
   profileUrl?: string;
 }
+
+export interface ChangePasswordForm {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}

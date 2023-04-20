@@ -1,8 +1,13 @@
 import React from 'react';
-import { Image, ImageProps, StyleProp } from 'react-native';
+import {
+  Image,
+  ImageProps,
+  ImageSourcePropType,
+  StyleProp,
+} from 'react-native';
 
 const LocalImage: React.FC<{
-  source: number;
+  source: ImageSourcePropType;
   width: number;
   height: number;
   style?: StyleProp<ImageProps>;
@@ -10,7 +15,10 @@ const LocalImage: React.FC<{
   return (
     <Image
       source={props.source}
-      style={[props.style, { width: props.width, height: props.height }]}
+      style={[
+        props.style,
+        { width: props.width, height: props.height, resizeMode: 'contain' },
+      ]}
     />
   );
 };

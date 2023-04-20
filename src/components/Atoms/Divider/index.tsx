@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 0.5,
-    backgroundColor: OpenColor.gray[2],
+    backgroundColor: OpenColor.gray[4],
   },
 });
 

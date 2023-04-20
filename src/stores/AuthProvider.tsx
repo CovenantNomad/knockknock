@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './AuthContext';
 import { LoginFormType, User } from '@/types/auth/auth';
 import { COLLCTION } from '@/types/firebase/firebase';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [initialized, setInitialized] = useState(false);
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [isSignInLoading, setIsSignInLoading] = useState(false);
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
@@ -107,8 +107,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setUserInfo(null);
       }
-      SplashScreen.hide();
     });
+    setInitialized(true);
 
     return () => {
       unsubscribe();
@@ -118,6 +118,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const value = useMemo(() => {
     return {
       userInfo,
+      initialized,
       isSignInLoading,
       isSignUpLoading,
       setUserInfo,
@@ -126,7 +127,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       signOut,
       signUp,
     };
-  }, [userInfo, isSignInLoading, isSignUpLoading, signIn, signOut, signUp]);
+  }, [
+    userInfo,
+    initialized,
+    isSignInLoading,
+    isSignUpLoading,
+    signIn,
+    signOut,
+    signUp,
+  ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

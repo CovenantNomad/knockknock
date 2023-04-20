@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.BODY,
     lineHeight: LINE_HEIGHT.BODY,
     color: OpenColor.black,
-    fontFamily: 'NotoSansKR-Regular',
+    // fontFamily: 'NotoSansKR-Regular',
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -6,18 +6,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import { createRoutineState } from '@/stores/CreateRoutineState';
 import { FONT_SIZE, LINE_HEIGHT } from '@/styles/font';
 import OpenColor from 'open-color';
 
-interface RoutineNameCardProps {
+interface RoutineNameForm {
   name: string;
-  setName: Dispatch<SetStateAction<string>>;
 }
 
-const RoutineNameCard = ({ name, setName }: RoutineNameCardProps) => {
+const RoutineNameCard = () => {
   const [createRoutine, setCreateRoutine] = useRecoilState(createRoutineState);
+  const { control, watch } = useForm<RoutineNameForm>();
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -27,24 +28,37 @@ const RoutineNameCard = ({ name, setName }: RoutineNameCardProps) => {
           { backgroundColor: createRoutine.color || '#B0D2D4' },
         ]}
       >
-        <TextInput
-          value={name}
-          onChangeText={(text: string) => setName(text)}
-          placeholder="영적루틴 이름"
-          onSubmitEditing={() => {
-            setCreateRoutine({
-              ...createRoutine,
-              name: name,
-            });
+        <Controller
+          name="name"
+          control={control}
+          rules={{
+            required: true,
+            maxLength: 16,
           }}
-          onEndEditing={() => {
-            setCreateRoutine({
-              ...createRoutine,
-              name: name,
-            });
-          }}
-          style={styles.textInput}
-          placeholderTextColor={OpenColor.gray[1]}
+          render={({ field: { onChange } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={watch('name')}
+              returnKeyType="done"
+              autoCapitalize="none"
+              onSubmitEditing={() => {
+                setCreateRoutine({
+                  ...createRoutine,
+                  name: watch('name'),
+                });
+              }}
+              onEndEditing={() => {
+                setCreateRoutine({
+                  ...createRoutine,
+                  name: watch('name'),
+                });
+              }}
+              selectionColor={OpenColor.blue[6]}
+              style={styles.TextInput}
+              placeholder="영적루틴 이름"
+              placeholderTextColor={OpenColor.gray[1]}
+            />
+          )}
         />
       </View>
     </TouchableWithoutFeedback>
@@ -60,10 +74,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
   },
-  textInput: {
+  TextInput: {
     width: '100%',
     fontSize: FONT_SIZE.BODY,
-    lineHeight: LINE_HEIGHT.BODY,
     fontWeight: '400',
     color: OpenColor.white,
     letterSpacing: 1.3,

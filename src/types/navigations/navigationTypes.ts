@@ -1,4 +1,8 @@
-import { FirebaseDailyRoutineType } from '../routines/routineType';
+import dayjs from 'dayjs';
+import {
+  FirebaseDailyRoutineType,
+  FirebaseRoutineType,
+} from '../routines/routineType';
 
 export type RootStackParamList = {
   App: undefined;
@@ -12,6 +16,7 @@ export type AppStackParamList = {
   Worship: undefined;
   Bible: undefined;
   Prayer: undefined;
+  Setting: undefined;
 };
 
 export type HomeStackParamList = {
@@ -20,9 +25,19 @@ export type HomeStackParamList = {
   HomeRoutineList: undefined;
   HomeRoutineDetail: {
     screen: string;
-    params: { routine: FirebaseDailyRoutineType };
+    params: {
+      routine: FirebaseDailyRoutineType;
+      previousRoute: string;
+    };
   };
-  Setting: undefined;
+};
+
+export type SettingStackParamList = {
+  SettingMain: undefined;
+  ChangePassword: undefined;
+  Withdraw: undefined;
+  ReminderList: undefined;
+  Update: undefined;
 };
 
 export type RoutineAddStackParamList = {
@@ -31,7 +46,13 @@ export type RoutineAddStackParamList = {
 };
 
 export type RoutineDetailStackParamList = {
-  RoutineDetailMain: { routine: FirebaseDailyRoutineType };
-  RoutineEditMain: { routine: FirebaseDailyRoutineType };
+  RoutineDetailMain: {
+    routine: FirebaseDailyRoutineType;
+    previousRoute: string;
+  };
+  RoutineEditMain: {
+    routine: FirebaseDailyRoutineType;
+    previousRoute: string;
+  };
   RoutineEditColor: undefined;
 };

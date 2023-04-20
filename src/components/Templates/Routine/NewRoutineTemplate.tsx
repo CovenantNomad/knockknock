@@ -19,19 +19,20 @@ import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
 import RoutineWeekdaySelect from '@/components/Organisms/Routine/RoutineWeekdaySelect';
 import RoutineSelectButton from '@/components/Organisms/Routine/RoutineSelectButton';
 import RoutineIconInput from '@/components/Organisms/Routine/RoutineIconInput';
+import NotificationSwitch from '@/components/Blocks/NotificationSwitch/NotificationSwitch';
+import Footer from '@/components/Atoms/Footer/Footer';
+import Button from '@/components/Atoms/Button';
 
 interface NewRoutineTemplateProps {
-  name: string;
-  setName: Dispatch<SetStateAction<string>>;
   icon: string;
   setIcon: Dispatch<SetStateAction<string>>;
+  onSaveHandler: () => void;
 }
 
 const NewRoutineTemplate = ({
-  name,
-  setName,
   icon,
   setIcon,
+  onSaveHandler,
 }: NewRoutineTemplateProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RoutineAddStackParamList>>();
@@ -63,7 +64,7 @@ const NewRoutineTemplate = ({
       <KeyboardAvoidingViewContainer>
         <HeadlineText text={'새로운 영적루틴'} />
         <Margin space={24} />
-        <RoutineNameCard name={name} setName={setName} />
+        <RoutineNameCard />
         <Margin space={24} />
         <RoutineIconInput title="Icon" icon={icon} setIcon={setIcon} />
         <Margin space={24} />
@@ -88,20 +89,10 @@ const NewRoutineTemplate = ({
           }
           onPress={showDatePicker}
         />
-        <RoutineSelectButton
+        <NotificationSwitch
           title={'Notification'}
           tooltipText={'이름, 요일, 시간 설정시 알람설정 가능'}
-          buttonLabel={
-            createRoutine.weekday.filter(item => item.selected === true)
-              .length === 0 ||
-            createRoutine.hour === null ||
-            createRoutine.minute === null ||
-            createRoutine.name === ''
-              ? '잠금'
-              : !createRoutine.hasNotification
-              ? '알람설정'
-              : '알람끄기'
-          }
+          value={createRoutine.hasNotification}
           disabled={
             createRoutine.weekday.filter(item => item.selected === true)
               .length === 0 ||
@@ -109,8 +100,15 @@ const NewRoutineTemplate = ({
             createRoutine.minute === null ||
             createRoutine.name === ''
           }
-          onPress={onToggelHandler}
+          onChange={onToggelHandler}
         />
+        <Margin space={36} />
+        <Button
+          label="저장"
+          onPress={onSaveHandler}
+          disabled={createRoutine.name === '' || createRoutine.hour === ''}
+        />
+        <Margin space={16} />
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="time"

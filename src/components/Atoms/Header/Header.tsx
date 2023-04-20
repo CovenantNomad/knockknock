@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 interface HeaderProps {
   headerLeft?: () => JSX.Element;
@@ -9,7 +9,7 @@ interface HeaderProps {
 
 const Header = ({ children, headerLeft, headerRight }: HeaderProps) => {
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { height: Platform.OS === 'ios' ? 48 : 56 }]}>
       {headerLeft !== undefined && (
         <View style={styles.left}>{headerLeft()}</View>
       )}
@@ -24,9 +24,7 @@ const Header = ({ children, headerLeft, headerRight }: HeaderProps) => {
 const styles = StyleSheet.create({
   header: {
     position: 'relative',
-    height: 44,
     flexDirection: 'row',
-    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

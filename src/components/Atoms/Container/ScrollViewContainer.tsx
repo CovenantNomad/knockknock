@@ -1,6 +1,6 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 
 interface ScrollViewContainerProps {
   children: React.ReactNode;
@@ -8,6 +8,7 @@ interface ScrollViewContainerProps {
 
 const ScrollViewContainer = ({ children }: ScrollViewContainerProps) => {
   const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <ScrollView
       style={[styles.container, { paddingBottom: tabBarHeight }]}

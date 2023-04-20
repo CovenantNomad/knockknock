@@ -1,23 +1,27 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
-import { LoginFormType } from '@/types/auth/auth';
+//navigations
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/types/navigations/navigationTypes';
+//states
 import AuthContext from '@/stores/AuthContext';
+//components
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AuthLayout from '@components/Atoms/Layout/AuthLayout';
 import KeyboardAvoidingViewContainer from '@/components/Atoms/Container/KeyboardAvoidingViewLayout';
 import Margin from '@components/Atoms/Margin';
-import { emailRegExp, moveToNext } from '@/utils/utils';
-import OpenColor from 'open-color';
 import DisplayText from '@/components/Atoms/Typography/DisplayText';
 import ErrorText from '@/components/Atoms/Typography/ErrorText';
 import LinkText from '@/components/Atoms/Typography/LinkText';
 import Button from '@/components/Atoms/Button';
-import { FONT_SIZE } from '@/styles/font';
 import AppTitleText from '@/components/Atoms/Typography/AppTitleText';
+//styles
+import { FONT_SIZE } from '@/styles/font';
+import OpenColor from 'open-color';
+import { emailRegExp, moveToNext } from '@/utils/utils';
+import { LoginFormType } from '@/types/auth/auth';
 
 interface SignInScreenProps {}
 

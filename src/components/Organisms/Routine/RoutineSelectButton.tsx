@@ -2,20 +2,21 @@ import React from 'react';
 import NavigationButton from '@/components/Atoms/NavigationButton';
 import Margin from '@/components/Atoms/Margin';
 import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
+import { Switch } from 'react-native';
 
 interface RoutineSelectButtonProps {
   title: string;
   buttonLabel: string;
+  tooltipText?: string;
   disabled?: boolean;
   onPress: () => void;
-  tooltipText?: string;
 }
 
 const RoutineSelectButton = ({
   title,
+  tooltipText,
   buttonLabel,
   disabled,
-  tooltipText,
   onPress,
 }: RoutineSelectButtonProps) => {
   return (

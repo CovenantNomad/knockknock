@@ -1,15 +1,12 @@
 import React from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
+import OpenColor from 'open-color';
 import { getMonthText } from '@/utils/dateUtils';
-import { COLOR } from '@/styles/colors';
+import { monthlyTrendsType } from '@/types/routines/routineType';
 
 interface RoutineTrendChartProps {
-  trends: {
-    year: number;
-    month: number;
-    stats: number;
-  }[];
+  trends: monthlyTrendsType[];
 }
 
 const RoutineTrendChart = ({ trends }: RoutineTrendChartProps) => {
@@ -31,8 +28,8 @@ const RoutineTrendChart = ({ trends }: RoutineTrendChartProps) => {
   };
 
   const chartConfig = {
-    backgroundGradientFrom: COLOR.WHITE,
-    backgroundGradientTo: COLOR.WHITE,
+    backgroundGradientFrom: OpenColor.white,
+    backgroundGradientTo: OpenColor.white,
     color: (opacity = 1) => `rgba(82, 113, 254, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(34, 34, 34, ${opacity})`,
     strokeWidth: 2, // optional, default 3

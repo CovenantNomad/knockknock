@@ -13,8 +13,3 @@ export function delay(t: number, v: Function) {
     setTimeout(resolve.bind(null, v), t);
   });
 }
-
-// export const sortByDateTime = (
-//   a: FirebaseRoutineType,
-//   b: FirebaseRoutineType,
-// ) => Number(a.hour) - Number(b.hour) || Number(a.minute) - Number(b.minute);

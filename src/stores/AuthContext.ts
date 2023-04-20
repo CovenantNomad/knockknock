@@ -3,6 +3,7 @@ import { LoginFormType, User } from '@/types/auth/auth';
 
 export interface AuthContextProp {
   userInfo: User | null;
+  initialized: boolean;
   isSignInLoading: boolean;
   isSignUpLoading: boolean;
   setUserInfo: Dispatch<SetStateAction<User | null>>;
@@ -14,6 +15,7 @@ export interface AuthContextProp {
 
 const AuthContext = createContext<AuthContextProp>({
   userInfo: null,
+  initialized: false,
   isSignInLoading: false,
   isSignUpLoading: false,
   setUserInfo: () => {},

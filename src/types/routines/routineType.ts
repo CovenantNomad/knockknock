@@ -62,3 +62,9 @@ export interface RoutineStaticsType {
   weeklyStatic: number;
   weeklyResult: FirebaseStaticType[];
 }
+
+export interface monthlyTrendsType {
+  year: number;
+  month: number;
+  stats: number;
+}

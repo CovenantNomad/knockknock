@@ -6,10 +6,15 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AuthProvider from '@/stores/AuthProvider';
 import RootScreen from '@/screens/RootScreen';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import CodePush from 'react-native-code-push';
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 2 } },
+  defaultOptions: {
+    queries: { retry: 2, refetchOnWindowFocus: false, refetchOnMount: true },
+  },
 });
+
+const codePushOptions = { checkFrequency: CodePush.CheckFrequency.MANUAL };
 
 function App(): JSX.Element {
   return (
@@ -28,4 +33,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export default CodePush(codePushOptions)(App);

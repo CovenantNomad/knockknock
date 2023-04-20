@@ -141,7 +141,7 @@ const useRoutines = () => {
       }
       //typeTwo (알람을 새롭게 설정하는 경우)
       if (!routine.hasNotification && editRoutine.hasNotification) {
-        createReminder();
+        await updateReminder(routine);
         const notificationIds = editRoutine.weekday
           .filter(item => item.selected === true)
           .map(item => `${editRoutine.name}-${getDayText(item.id)}요일-알림`);
@@ -200,7 +200,7 @@ const useRoutines = () => {
       };
       if (!routine.isActive) {
         if (editRoutine.hasNotification) {
-          createReminder();
+          await updateReminder(routine);
           const notificationIds = editRoutine.weekday
             .filter(item => item.selected === true)
             .map(item => `${editRoutine.name}-${getDayText(item.id)}요일-알림`);
@@ -208,6 +208,11 @@ const useRoutines = () => {
             ...saveData,
             notificationIds: notificationIds,
           };
+          setEditRoutine({
+            ...editRoutine,
+            notificationIds: notificationIds,
+            isActive: true,
+          });
         }
         return saveData;
       } else {
@@ -223,6 +228,12 @@ const useRoutines = () => {
         if (routine.hasNotification && routine.notificationIds) {
           await removeReminders(routine.notificationIds);
         }
+        setEditRoutine({
+          ...editRoutine,
+          hasNotification: false,
+          notificationIds: [],
+          isActive: false,
+        });
       }
     },
     [removeReminders],

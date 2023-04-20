@@ -1,9 +1,9 @@
-import { COLOR } from '@/styles/colors';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { getDayText } from '@/utils/dateUtils';
 import { FONT_SIZE } from '@/styles/font';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import OpenColor from 'open-color';
 
 interface WeeklyPerformanceChartProps {
   data: boolean[];
@@ -16,7 +16,7 @@ const WeeklyPerformanceChart = ({ data }: WeeklyPerformanceChartProps) => {
         <View style={styles.column} key={index}>
           <View style={styles.wrapper}>
             {item && (
-              <Fontisto name="check" size={18} color={COLOR.PRIMARY_BLUE} />
+              <Fontisto name="check" size={18} color={OpenColor.blue[6]} />
             )}
           </View>
           <Text style={styles.label}>{getDayText(index)}</Text>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 8,
     borderRadius: 12,
-    backgroundColor: COLOR.WHITE,
+    backgroundColor: OpenColor.white,
   },
   column: {
     flex: 1,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   label: {
-    color: COLOR.GRAY_4,
+    color: OpenColor.gray[6],
     fontSize: FONT_SIZE.SMALLTEXT,
   },
 });

@@ -2,15 +2,18 @@ import React from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import dayjs from 'dayjs';
 import { UseMutateAsyncFunction } from 'react-query';
-import { updateDailyRoutineByIdProp } from '@/types/firebase/firebase';
+import {
+  BibleType,
+  updateDailyRoutineByIdProp,
+} from '@/types/firebase/firebase';
 import { FirebaseDailyRoutineType } from '@/types/routines/routineType';
 import Margin from '@/components/Atoms/Margin';
 import BibleCard from '@/components/Blocks/BibleCard';
-import { BibleType } from '@/types/bibleCalendar/bibleCalendarType';
-import { sortByDateTime } from '@/utils/utils';
-import SwipeableListItemTwo from '@/components/Blocks/SwipeableListItemTwo';
+import SwipeableListItem from '@/components/Blocks/SwipeableListItem';
 import FlatlistContainer from '@/components/Atoms/Container/FlatlistContainer';
 import EmptyComponent from '@/components/Atoms/EmptyComponent/EmptyComponent';
+import { sortByDateTime } from '@/utils/dateUtils';
+import HomeFlatlistHeader from '@/components/Organisms/HomeScreen/HomeFlatlistHeader';
 
 interface HomeTemplateProps {
   data: FirebaseDailyRoutineType[] | undefined;
@@ -49,15 +52,14 @@ const HomeTemplate = ({
           data={data?.sort((a, b) => sortByDateTime(a, b))}
           keyExtractor={(item, _) => item.routineId}
           renderItem={({ item }: renderItemProps) => (
-            <SwipeableListItemTwo
+            <SwipeableListItem
               routine={item}
               selectedDate={selectedDate}
               mutateAsync={mutateAsync}
             />
           )}
           ItemSeparatorComponent={() => <Margin space={12} />}
-          ListHeaderComponent={<BibleCard bible={bible} />}
-          ListHeaderComponentStyle={styles.listHeader}
+          ListHeaderComponent={<HomeFlatlistHeader bible={bible} />}
           scrollEnabled
           showsVerticalScrollIndicator={false}
           ListFooterComponent={<Margin space={24} />}
@@ -67,11 +69,5 @@ const HomeTemplate = ({
     </FlatlistContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  listHeader: {
-    marginVertical: 24,
-  },
-});
 
 export default HomeTemplate;

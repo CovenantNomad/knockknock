@@ -1,0 +1,2 @@
+json_key_file("key/pc-api-7080708349218247648-441-7215d54ba61a.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.covenantnomad.knockknock") # e.g. com.krausefx.app

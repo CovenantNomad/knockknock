@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.HEADING_3,
     lineHeight: LINE_HEIGHT.HEADING_3,
     color: OpenColor.black,
-    fontFamily: 'NotoSansKR-Bold',
+    fontWeight: '600',
   },
 });
 

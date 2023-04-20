@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
+//navigation
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HomeStackParamList } from '@/types/navigations/navigationTypes';
-import { DEFAULTROUTINE } from '@/constants/defaultValues';
+//fetch
+import { useMutation, useQueryClient } from 'react-query';
+import { createRoutineFirebase } from '@/api/routine';
 // hooks
 import useRoutines from '@/hooks/useRoutines';
 // components
@@ -11,21 +14,25 @@ import AppLayout from '@components/Atoms/Layout/AppLayout';
 import Header from '@components/Atoms/Header/Header';
 import HeaderBackButton from '@/components/Atoms/Header/HeaderBackButton';
 import NewRoutineTemplate from '@components/Templates/Routine/NewRoutineTemplate';
-import Margin from '@/components/Atoms/Margin';
-import Footer from '@/components/Atoms/Footer/Footer';
-import { useQueryClient } from 'react-query';
-import { createRoutineFirebase } from '@/api/routine/routine';
-
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import Button from '@/components/Atoms/Button';
+import { DEFAULTROUTINE } from '@/constants/defaultValues';
 
 const RoutineAddScreen = () => {
   const queryClient = useQueryClient();
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
-  const [name, setName] = useState<string>('');
   const [icon, setIcon] = useState<string>('');
-  const { createRoutine, setCreateRoutine, onCreateRoutine } = useRoutines();
+  const { setCreateRoutine, onCreateRoutine } = useRoutines();
+
+  const { mutateAsync: createRoutineMutation } = useMutation(
+    createRoutineFirebase,
+    {
+      onSettled(data, error, variables, context) {
+        queryClient.invalidateQueries({ queryKey: 'getRoutines' });
+        queryClient.invalidateQueries({ queryKey: 'getRoutinesByDay' });
+      },
+    },
+  );
 
   const onSaveHandler = async () => {
     Keyboard.dismiss();
@@ -48,7 +55,7 @@ const RoutineAddScreen = () => {
         return;
       }
 
-      const response = await createRoutineFirebase(data);
+      const response = await createRoutineMutation(data);
       if (response?.routineId) {
         Toast.show({
           type: 'success',
@@ -56,9 +63,7 @@ const RoutineAddScreen = () => {
           visibilityTime: 2000,
         });
         setCreateRoutine(DEFAULTROUTINE);
-        setName('');
         setIcon('');
-        queryClient.invalidateQueries(['getRoutinesByDay']);
       }
     }
   };
@@ -77,19 +82,10 @@ const RoutineAddScreen = () => {
         }
       />
       <NewRoutineTemplate
-        name={name}
-        setName={setName}
         icon={icon}
         setIcon={setIcon}
+        onSaveHandler={onSaveHandler}
       />
-      <Margin space={24} />
-      <Footer>
-        <Button
-          label="저장"
-          onPress={onSaveHandler}
-          disabled={createRoutine.name === '' || createRoutine.hour === ''}
-        />
-      </Footer>
     </AppLayout>
   );
 };

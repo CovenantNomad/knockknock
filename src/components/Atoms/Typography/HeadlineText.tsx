@@ -10,14 +10,7 @@ interface HeadlineTextProps {
 const HeadlineText = ({ text }: HeadlineTextProps) => {
   return (
     <View>
-      <Text
-        style={[
-          styles.title,
-          Platform.OS === 'android' && { fontFamily: 'SF-Pro-Bold' },
-        ]}
-      >
-        {text}
-      </Text>
+      <Text style={styles.title}>{text}</Text>
     </View>
   );
 };
