@@ -8,6 +8,7 @@ interface FlatlistContainerProps {
 
 const FlatlistContainer = ({ children }: FlatlistContainerProps) => {
   const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <View style={[styles.container, { paddingBottom: tabBarHeight }]}>
       {children}

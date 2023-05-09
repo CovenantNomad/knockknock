@@ -1,6 +1,6 @@
 {
   "name": "knockknock",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -8,10 +8,14 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "androidRelaseStaing": "react-native run-android --mode=releaseStaging",
-    "androidRelase": "react-native run-android --mode=release",
-    "iosStaging": "react-native run-ios --simulator=iPhone 14 Pro --mode=Staging",
-    "iosRelase": "react-native run-ios --simulator=iPhone 14 Pro --mode=Release"
+    "build-staging-android": "react-native run-android --mode=releaseStaging",
+    "build-release-android": "react-native run-android --mode=release",
+    "build-staging-ios": "react-native run-ios --simulator=iPhone 14 Pro --mode=Staging",
+    "build-release-ios": "react-native run-ios --simulator=iPhone 14 Pro --mode=Release",
+    "code-push-staging-ios": "appcenter codepush release-react -a Covenant-Nomad/KnockKnock-iOS -d Staging",
+    "code-push-staging-android": "appcenter codepush release-react -a Covenant-Nomad/KnockKnock-Android -d Staging",
+    "code-push-prod-ios": "appcenter codepush release-react -a Covenant-Nomad/KnockKnock-iOS -d Production",
+    "code-push-prod-android": "appcenter codepush release-react -a Covenant-Nomad/KnockKnock-Android -d Production"
   },
   "dependencies": {
     "@notifee/react-native": "^7.6.1",

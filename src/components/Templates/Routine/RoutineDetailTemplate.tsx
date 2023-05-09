@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 // components
 import ScrollViewContainer from '@/components/Atoms/Container/ScrollViewContainer';
 import HeadlineText from '@/components/Atoms/Typography/HeadlineText';
@@ -9,6 +9,7 @@ import RoutineTrendChart from '@/components/Organisms/Charts/RoutineTrendChart';
 import WeeklyPerformanceChart from '@/components/Organisms/Charts/WeeklyPerformanceChart';
 import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
 import { monthlyTrendsType } from '@/types/routines/routineType';
+import EmptyComponent from '@/components/Atoms/EmptyComponent/EmptyComponent';
 
 interface RoutineDetailTemplateProps {
   title: string;
@@ -50,9 +51,7 @@ const RoutineDetailTemplate = ({
           <RoutineTrendChart trends={lastFiveMonthResults} />
         </>
       ) : (
-        <View>
-          <Text>데이터 없음</Text>
-        </View>
+        <EmptyComponent text="통계 데이터가 없습니다" />
       )}
     </ScrollViewContainer>
   );

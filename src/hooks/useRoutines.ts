@@ -1,56 +1,25 @@
-import { Alert } from 'react-native';
+import { useCallback, useContext } from 'react';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useRecoilState } from 'recoil';
+import { createRoutineState } from '@/stores/CreateRoutineState';
+import { editRoutineState } from '@/stores/EditRoutineState';
+import AuthContext from '@/stores/AuthContext';
+//hooks
+import useReminer from './useReminder';
+//types
 import {
   FirebaseRoutineType,
   SubmitRoutineType,
 } from './../types/routines/routineType';
-import { useRecoilState } from 'recoil';
-import useReminer from './useReminder';
 import { getDayText } from '@/utils/dateUtils';
-import { useCallback, useContext } from 'react';
-import AuthContext from '@/stores/AuthContext';
-import { createRoutineState } from '@/stores/CreateRoutineState';
-import { editRoutineState } from '@/stores/EditRoutineState';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const useRoutines = () => {
   const { userInfo } = useContext(AuthContext);
   const [createRoutine, setCreateRoutine] = useRecoilState(createRoutineState);
   const [editRoutine, setEditRoutine] = useRecoilState(editRoutineState);
-  const { channelId, addReminder, removeReminders } = useReminer();
+  const { createReminders, removeReminders } = useReminer();
 
-  const createReminder = useCallback(() => {
-    createRoutine.weekday
-      .filter(day => day.selected === true)
-      .map(async day => {
-        await addReminder(
-          createRoutine.hour,
-          createRoutine.minute,
-          createRoutine.name,
-          day.id,
-        );
-      });
-  }, [addReminder, createRoutine]);
-
-  const updateReminder = useCallback(
-    async (routine: FirebaseRoutineType) => {
-      if (routine.notificationIds !== undefined) {
-        await removeReminders(routine.notificationIds);
-      }
-      editRoutine.weekday
-        .filter(day => day.selected === true)
-        .map(async day => {
-          await addReminder(
-            editRoutine.hour,
-            editRoutine.minute,
-            editRoutine.name,
-            day.id,
-          );
-        });
-    },
-    [addReminder, removeReminders, editRoutine],
-  );
-
-  const onCreateRoutine = useCallback(() => {
+  const onCreateRoutine = async () => {
     if (userInfo) {
       const createWeekday = createRoutine.weekday
         .filter(item => item.selected === true)
@@ -70,14 +39,23 @@ const useRoutines = () => {
       };
 
       if (createRoutine.hasNotification) {
-        createReminder();
-        const notificationIds = createRoutine.weekday
-          .filter(item => item.selected === true)
-          .map(item => `${createRoutine.name}-${getDayText(item.id)}요일-알림`);
-        saveData = {
-          ...saveData,
-          notificationIds: notificationIds,
-        };
+        try {
+          const reminders = await createReminders(
+            createRoutine.hour,
+            createRoutine.minute,
+            createRoutine.name,
+            createWeekday,
+          );
+          saveData = {
+            ...saveData,
+            notificationIds: reminders,
+          };
+        } catch {
+          Toast.show({
+            type: 'error',
+            text1: '알람설정 중 오류가 발생하였습니다.',
+          });
+        }
       }
 
       if (createRoutine.isPeriodRoutine) {
@@ -90,6 +68,12 @@ const useRoutines = () => {
 
       if (saveData !== null) {
         return saveData;
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: '새로운 루틴을 생성하지 못했습니다.',
+        });
+        return null;
       }
     } else {
       Toast.show({
@@ -98,7 +82,7 @@ const useRoutines = () => {
       });
       return;
     }
-  }, [userInfo, createRoutine, createReminder]);
+  };
 
   const onUpdateRoutine = useCallback(
     async (routine: FirebaseRoutineType) => {
@@ -133,22 +117,39 @@ const useRoutines = () => {
         routine.notificationIds !== undefined &&
         !editRoutine.hasNotification
       ) {
-        await removeReminders(routine.notificationIds);
-        saveData = {
-          ...saveData,
-          notificationIds: [],
-        };
+        try {
+          await removeReminders(routine.notificationIds);
+          saveData = {
+            ...saveData,
+            notificationIds: [],
+          };
+        } catch {
+          Toast.show({
+            type: 'error',
+            text1: '알람설정 중 오류가 발생하였습니다.',
+          });
+        }
       }
       //typeTwo (알람을 새롭게 설정하는 경우)
       if (!routine.hasNotification && editRoutine.hasNotification) {
-        await updateReminder(routine);
-        const notificationIds = editRoutine.weekday
-          .filter(item => item.selected === true)
-          .map(item => `${editRoutine.name}-${getDayText(item.id)}요일-알림`);
-        saveData = {
-          ...saveData,
-          notificationIds: notificationIds,
-        };
+        try {
+          const updateReminders = await createReminders(
+            editRoutine.hour,
+            editRoutine.minute,
+            editRoutine.name,
+            editWeekday,
+          );
+
+          saveData = {
+            ...saveData,
+            notificationIds: updateReminders,
+          };
+        } catch {
+          Toast.show({
+            type: 'error',
+            text1: '알람설정 중 오류가 발생하였습니다.',
+          });
+        }
       }
 
       //(알람 유지)
@@ -160,24 +161,43 @@ const useRoutines = () => {
           routine.hour !== editRoutine.hour ||
           routine.minute !== editRoutine.minute
         ) {
-          await updateReminder(routine);
-          const notificationIds = editRoutine.weekday
-            .filter(item => item.selected === true)
-            .map(item => `${editRoutine.name}-${getDayText(item.id)}요일-알림`);
-          saveData = {
-            ...saveData,
-            notificationIds: notificationIds,
-          };
+          try {
+            if (routine.notificationIds !== undefined) {
+              await removeReminders(routine.notificationIds);
+            }
+
+            const updateReminders = await createReminders(
+              editRoutine.hour,
+              editRoutine.minute,
+              editRoutine.name,
+              editWeekday,
+            );
+
+            saveData = {
+              ...saveData,
+              notificationIds: updateReminders,
+            };
+          } catch {
+            Toast.show({
+              type: 'error',
+              text1: '알람설정 중 오류가 발생하였습니다.',
+            });
+          }
         }
       }
 
       if (saveData !== null) {
         return saveData;
       } else {
-        return;
+        Toast.show({
+          type: 'error',
+          text1: '영적루틴을 업데이트 하지 못했습니다',
+        });
+
+        return null;
       }
     },
-    [editRoutine, createReminder, updateReminder, removeReminders],
+    [editRoutine],
   );
 
   const onActiveRoutine = useCallback(
@@ -200,7 +220,21 @@ const useRoutines = () => {
       };
       if (!routine.isActive) {
         if (editRoutine.hasNotification) {
-          await updateReminder(routine);
+          if (routine.notificationIds !== undefined) {
+            await removeReminders(routine.notificationIds);
+          }
+          // await Promise.all(
+          //   editRoutine.weekday
+          //     .filter(day => day.selected === true)
+          //     .map(async day => {
+          //       await addReminder(
+          //         createRoutine.hour,
+          //         createRoutine.minute,
+          //         createRoutine.name,
+          //         day.id,
+          //       );
+          //     }),
+          // );
           const notificationIds = editRoutine.weekday
             .filter(item => item.selected === true)
             .map(item => `${editRoutine.name}-${getDayText(item.id)}요일-알림`);
@@ -219,28 +253,24 @@ const useRoutines = () => {
         return;
       }
     },
-    [editRoutine, createReminder],
+    [editRoutine],
   );
 
-  const onInactiveRoutine = useCallback(
-    async (routine: FirebaseRoutineType) => {
-      if (routine.isActive) {
-        if (routine.hasNotification && routine.notificationIds) {
-          await removeReminders(routine.notificationIds);
-        }
-        setEditRoutine({
-          ...editRoutine,
-          hasNotification: false,
-          notificationIds: [],
-          isActive: false,
-        });
+  const onInactiveRoutine = async (routine: FirebaseRoutineType) => {
+    if (routine.isActive) {
+      if (routine.hasNotification && routine.notificationIds) {
+        await removeReminders(routine.notificationIds);
       }
-    },
-    [removeReminders],
-  );
+      setEditRoutine({
+        ...editRoutine,
+        hasNotification: false,
+        notificationIds: [],
+        isActive: false,
+      });
+    }
+  };
 
   return {
-    channelId,
     createRoutine,
     setCreateRoutine,
     editRoutine,

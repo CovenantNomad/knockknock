@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { Keyboard, TouchableOpacity } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { AppState, Keyboard, TouchableOpacity } from 'react-native';
 //fetch
-import { useMutation, useQueryClient } from 'react-query';
+import { focusManager, useMutation, useQueryClient } from 'react-query';
 import {
   deleteRoutineFirebase,
   inActiveRoutineFirebase,
@@ -47,15 +47,17 @@ const RoutineEditScreen = ({ route }: RoutineEditScreenProps) => {
 
   const { mutateAsync: updateMutation } = useMutation(updateRoutineFirebase, {
     onSettled(data, error, variables, context) {
-      queryClient.invalidateQueries({ queryKey: 'getRoutines' });
-      queryClient.invalidateQueries({ queryKey: 'getRoutinesByDay' });
+      queryClient.invalidateQueries({ queryKey: ['getRoutines'] });
+      queryClient.invalidateQueries({
+        queryKey: ['getRoutinesByDay'],
+      });
     },
   });
 
   const { mutateAsync: deleteMutaion } = useMutation(deleteRoutineFirebase, {
     onSettled(data, error, variables, context) {
-      queryClient.invalidateQueries({ queryKey: 'getRoutines' });
-      queryClient.invalidateQueries({ queryKey: 'getRoutinesByDay' });
+      queryClient.invalidateQueries({ queryKey: ['getRoutines'] });
+      queryClient.invalidateQueries({ queryKey: ['getRoutinesByDay'] });
     },
   });
 
@@ -63,8 +65,8 @@ const RoutineEditScreen = ({ route }: RoutineEditScreenProps) => {
     inActiveRoutineFirebase,
     {
       onSettled(data, error, variables, context) {
-        queryClient.invalidateQueries({ queryKey: 'getRoutines' });
-        queryClient.invalidateQueries({ queryKey: 'getRoutinesByDay' });
+        queryClient.invalidateQueries({ queryKey: ['getRoutines'] });
+        queryClient.invalidateQueries({ queryKey: ['getRoutinesByDay'] });
       },
     },
   );
@@ -72,7 +74,7 @@ const RoutineEditScreen = ({ route }: RoutineEditScreenProps) => {
   const onUpdateHandler = async () => {
     Keyboard.dismiss();
     const submitData = await onUpdateRoutine(routine);
-    if (submitData !== undefined) {
+    if (submitData !== null) {
       await updateMutation({ data: submitData, routineId: routine.routineId });
     }
     Toast.show({

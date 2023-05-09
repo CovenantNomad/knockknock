@@ -16,6 +16,7 @@ const useDateTimePicker = () => {
   return {
     date,
     isDatePickerVisible,
+    setDatePickerVisibility,
     setDate,
     showDatePicker,
     hideDatePicker,

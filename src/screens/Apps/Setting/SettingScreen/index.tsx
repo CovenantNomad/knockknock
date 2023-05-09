@@ -28,7 +28,7 @@ interface SettingScreenProps {}
 const SettingScreen = ({}: SettingScreenProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingStackParamList>>();
-  const { signOut } = useContext(AuthContext);
+  const { userInfo, signOut } = useContext(AuthContext);
   const { checkUpdateApp, updateAvailable } = useCodePush();
 
   useEffect(() => {
@@ -92,6 +92,7 @@ const SettingScreen = ({}: SettingScreenProps) => {
           계정설정
         </Text>
         <Margin space={12} />
+        <MenuItem title={'이메일'} status={userInfo?.email} />
         <MenuItem
           title={'비밀번호 재설정'}
           onPress={() => navigation.navigate('ChangePassword')}
@@ -115,6 +116,10 @@ const SettingScreen = ({}: SettingScreenProps) => {
           title={'업데이트 정보'}
           status={updateAvailable ? '업데이트 있음' : '최신상태'}
           onPress={() => navigation.navigate('Update')}
+        />
+        <MenuItem
+          title={'알림'}
+          onPress={() => navigation.navigate('ReminderList')}
         />
         <Margin space={32} />
         <View style={{ width: '50%', alignSelf: 'center' }}>

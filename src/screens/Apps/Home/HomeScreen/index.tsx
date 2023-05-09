@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 //apis
@@ -28,12 +28,10 @@ import { FirebaseDailyRoutineType } from '@/types/routines/routineType';
 import { BibleType } from '@/types/firebase/firebase';
 //utils
 import { getDayText } from '@/utils/dateUtils';
-import dayjs from 'dayjs';
 
 interface HomeScreenProps {}
 
 const HomeScreen = ({}: HomeScreenProps) => {
-  const now = dayjs();
   const queryClient = useQueryClient();
   const { userInfo } = useContext(AuthContext);
   const { selectedDate, handleConfirm } = useCalendarStrip();
@@ -92,8 +90,8 @@ const HomeScreen = ({}: HomeScreenProps) => {
       ),
     {
       enabled: !!selectedDate && !!userInfo,
-      staleTime: 1000 * 60 * 5,
-      cacheTime: 1000 * 60 * 10,
+      // staleTime: 1000 * 60 * 3,
+      cacheTime: 1000 * 60 * 5,
     },
   );
 

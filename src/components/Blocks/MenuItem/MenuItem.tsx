@@ -8,7 +8,7 @@ import Margin from '@/components/Atoms/Margin';
 interface MenuItemProps {
   title: string;
   status?: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const MenuItem = ({ title, status, onPress }: MenuItemProps) => {
@@ -18,16 +18,18 @@ const MenuItem = ({ title, status, onPress }: MenuItemProps) => {
         <Text style={styles.title}>{title}</Text>
         <View style={styles.description}>
           {status && <Text style={styles.descriptionText}>{status}</Text>}
-          <TouchableOpacity
-            hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
-            onPress={onPress}
-          >
-            <Ionicons
-              name="chevron-forward-sharp"
-              color={OpenColor.gray[4]}
-              size={20}
-            />
-          </TouchableOpacity>
+          {onPress && (
+            <TouchableOpacity
+              hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+              onPress={onPress}
+            >
+              <Ionicons
+                name="chevron-forward-sharp"
+                color={OpenColor.gray[4]}
+                size={20}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <Margin space={20} />

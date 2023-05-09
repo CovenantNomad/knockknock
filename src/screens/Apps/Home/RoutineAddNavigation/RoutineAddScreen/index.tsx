@@ -16,6 +16,8 @@ import HeaderBackButton from '@/components/Atoms/Header/HeaderBackButton';
 import NewRoutineTemplate from '@components/Templates/Routine/NewRoutineTemplate';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { DEFAULTROUTINE } from '@/constants/defaultValues';
+import { useRecoilValue } from 'recoil';
+import { createRoutineState } from '@/stores/CreateRoutineState';
 
 const RoutineAddScreen = () => {
   const queryClient = useQueryClient();
@@ -23,38 +25,41 @@ const RoutineAddScreen = () => {
     useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [icon, setIcon] = useState<string>('');
   const { setCreateRoutine, onCreateRoutine } = useRoutines();
+  const createRoutine = useRecoilValue(createRoutineState);
 
   const { mutateAsync: createRoutineMutation } = useMutation(
     createRoutineFirebase,
     {
       onSettled(data, error, variables, context) {
-        queryClient.invalidateQueries({ queryKey: 'getRoutines' });
-        queryClient.invalidateQueries({ queryKey: 'getRoutinesByDay' });
+        queryClient.invalidateQueries({ queryKey: ['getRoutines'] });
+        queryClient.invalidateQueries({
+          queryKey: ['getRoutinesByDay'],
+        });
       },
     },
   );
 
   const onSaveHandler = async () => {
     Keyboard.dismiss();
-    const data = onCreateRoutine();
-    if (data) {
-      if (data.name === '') {
-        Toast.show({
-          type: 'error',
-          text1: '루틴이름을 작성해주세요',
-          visibilityTime: 2000,
-        });
-        return;
-      }
-      if (data.hour === '') {
-        Toast.show({
-          type: 'error',
-          text1: '루틴시간을 작성해주세요',
-          visibilityTime: 2000,
-        });
-        return;
-      }
+    if (createRoutine.name === '') {
+      Toast.show({
+        type: 'error',
+        text1: '루틴이름을 작성해주세요',
+        visibilityTime: 2000,
+      });
+      return;
+    }
+    if (createRoutine.hour === '') {
+      Toast.show({
+        type: 'error',
+        text1: '루틴시간을 작성해주세요',
+        visibilityTime: 2000,
+      });
+      return;
+    }
 
+    const data = await onCreateRoutine();
+    if (data) {
       const response = await createRoutineMutation(data);
       if (response?.routineId) {
         Toast.show({

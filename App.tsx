@@ -10,7 +10,7 @@ import CodePush from 'react-native-code-push';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { retry: 2, refetchOnWindowFocus: false, refetchOnMount: true },
+    queries: { retry: 2, refetchOnMount: true },
   },
 });
 

@@ -40,8 +40,12 @@ const EditRoutineTemplate = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RoutineDetailStackParamList>>();
   const [editRoutine, setEditRoutine] = useRecoilState(editRoutineState);
-  const { isDatePickerVisible, showDatePicker, hideDatePicker } =
-    useDateTimePicker();
+  const {
+    isDatePickerVisible,
+    setDatePickerVisibility,
+    showDatePicker,
+    hideDatePicker,
+  } = useDateTimePicker();
 
   const onToggelHandler = () => {
     setEditRoutine({
@@ -51,6 +55,7 @@ const EditRoutineTemplate = ({
   };
 
   const handleConfirm = (time: Date) => {
+    setDatePickerVisibility(false);
     const hour = dayjs(time).hour();
     const minute = dayjs(time).minute();
     setEditRoutine({
@@ -58,7 +63,6 @@ const EditRoutineTemplate = ({
       hour: hour.toString().padStart(2, '0'),
       minute: minute.toString().padStart(2, '0'),
     });
-    hideDatePicker();
   };
 
   return (
@@ -116,8 +120,8 @@ const EditRoutineTemplate = ({
           isVisible={isDatePickerVisible}
           mode="time"
           date={dayjs()
-            .hour(Number(routine.hour))
-            .minute(Number(routine.minute))
+            .hour(Number(editRoutine.hour))
+            .minute(Number(editRoutine.minute))
             .toDate()}
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}

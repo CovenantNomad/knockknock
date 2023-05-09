@@ -49,6 +49,7 @@ const RoutineIconInput = ({ title, icon, setIcon }: RoutineIconInputProps) => {
             }}
             style={styles.textInput}
             placeholderTextColor={OpenColor.gray[4]}
+            maxLength={2}
           />
         </View>
       </TouchableWithoutFeedback>

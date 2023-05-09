@@ -62,8 +62,10 @@ const HomeTemplate = ({
           ListHeaderComponent={<HomeFlatlistHeader bible={bible} />}
           scrollEnabled
           showsVerticalScrollIndicator={false}
-          ListFooterComponent={<Margin space={24} />}
-          ListEmptyComponent={<EmptyComponent />}
+          ListFooterComponent={<Margin space={49 + 32} />}
+          ListEmptyComponent={
+            <EmptyComponent text="오늘은 영적루틴이 없습니다" />
+          }
         />
       )}
     </FlatlistContainer>

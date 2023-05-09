@@ -3,12 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import OpenColor from 'open-color';
 import { FONT_SIZE } from '@/styles/font';
 
-interface EmptyComponentProps {}
+interface EmptyComponentProps {
+  text: string;
+}
 
-const EmptyComponent = ({}: EmptyComponentProps) => {
+const EmptyComponent = ({ text }: EmptyComponentProps) => {
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.text}>오늘은 영적루틴이 없습니다</Text>
+      <Text style={styles.text}>{text}</Text>
     </View>
   );
 };

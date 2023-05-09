@@ -5,6 +5,7 @@ import SettingScreen from './SettingScreen';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import WithdrawScreen from './WithdrawScreen';
 import UpdateScreen from './UpdateScreen';
+import ReminderScreen from './ReminderScreen';
 
 const Stack = createNativeStackNavigator<SettingStackParamList>();
 
@@ -15,6 +16,7 @@ const SettingNavigation = () => {
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="Withdraw" component={WithdrawScreen} />
       <Stack.Screen name="Update" component={UpdateScreen} />
+      <Stack.Screen name="ReminderList" component={ReminderScreen} />
     </Stack.Navigator>
   );
 };

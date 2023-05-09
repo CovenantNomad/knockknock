@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //navigation
 import { useNavigation } from '@react-navigation/native';
@@ -16,14 +16,19 @@ import Margin from '@/components/Atoms/Margin';
 import { FONT_SIZE, LINE_HEIGHT } from '@/styles/font';
 import OpenColor from 'open-color';
 
-import notifee from '@notifee/react-native';
-
 interface ReminderScreenProps {}
 
 const ReminderScreen = ({}: ReminderScreenProps) => {
-  const { reminders, removeAllReminder } = useReminer();
+  const { loadReminders, removeAllReminder } = useReminer();
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingStackParamList>>();
+
+  useEffect(() => {
+    (async () => {
+      const notifications = await loadReminders();
+      console.log(notifications);
+    })();
+  }, []);
 
   return (
     <AppLayout>
