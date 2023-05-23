@@ -34,14 +34,14 @@ const RoutineWeekdaySelect = ({
         style={[
           styles.circleSelector,
           {
-            backgroundColor: weekday.selected ? '#B0D2D4' : OpenColor.white,
+            backgroundColor: weekday.selected ? '#B0D2D4' : OpenColor.gray[5],
           },
         ]}
         onPress={() => onToggleSelect(weekday.id)}
       >
         <Text
           style={{
-            color: weekday.selected ? OpenColor.white : OpenColor.gray[4],
+            color: OpenColor.white, fontWeight: '600'
           }}
         >
           {weekday.title}

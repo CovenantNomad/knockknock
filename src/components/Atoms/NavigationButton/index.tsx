@@ -5,17 +5,19 @@ import OpenColor from 'open-color';
 
 interface NavigationButtonProps {
   label: string;
+  bgColor?: string;
   disabled?: boolean;
   onPress: () => void;
 }
 
 const NavigationButton = ({
   label,
+  bgColor,
   disabled,
   onPress,
 }: NavigationButtonProps) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} disabled={disabled}>
+    <TouchableOpacity style={[styles.card, {backgroundColor: bgColor ? bgColor : OpenColor.white}]} onPress={onPress} disabled={disabled}>
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
   );
@@ -25,9 +27,8 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: OpenColor.white,
   },
   label: {
     fontSize: FONT_SIZE.CALLOUT,

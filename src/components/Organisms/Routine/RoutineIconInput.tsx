@@ -1,73 +1,116 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import {
-  Keyboard,
   StyleSheet,
+  Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { createRoutineState } from '@/stores/CreateRoutineState';
+import { Control, Controller, FieldErrors, UseFormWatch } from 'react-hook-form';
+//components
+import KeyboardAvoidingViewContainer from '@/components/Atoms/Container/KeyboardAvoidingViewLayout';
+import Divider from '@/components/Atoms/Divider';
+import SectionContainer from '@/components/Atoms/Container/SectionContainer';
+import Button from '@/components/Atoms/Button';
+import ErrorText from '@/components/Atoms/Typography/ErrorText';
+import Margin from '@/components/Atoms/Margin';
+//styles
 import OpenColor from 'open-color';
 import { FONT_SIZE } from '@/styles/font';
-import Margin from '@/components/Atoms/Margin';
-import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
+import { RoutineIconForm } from '@/screens/Apps/Home/RoutineAddNavigation/RoutineAddIconScreen';
 
 interface RoutineIconInputProps {
-  title: string;
-  icon: string;
-  setIcon: Dispatch<SetStateAction<string>>;
+  control: Control<RoutineIconForm, any>
+  errors: FieldErrors<RoutineIconForm>
+  watch: UseFormWatch<RoutineIconForm>
+  onSaveHandler: () => void
 }
 
-const RoutineIconInput = ({ title, icon, setIcon }: RoutineIconInputProps) => {
-  const [createRoutine, setCreateRoutine] = useRecoilState(createRoutineState);
+const RoutineIconInput = ({ control, errors, watch, onSaveHandler }: RoutineIconInputProps) => {
 
   return (
-    <>
-      <SectionTitleText
-        text={title}
-        tooltipText="이모지는 한 개만 입력 할 수 있습니다"
-      />
-      <Margin space={12} />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={{ width: '100%' }}>
-          <TextInput
-            value={icon}
-            onChangeText={(text: string) => setIcon(text)}
-            placeholder="이모지로 아이콘 입력"
-            onSubmitEditing={() => {
-              setCreateRoutine({
-                ...createRoutine,
-                icon: icon.trim(),
-              });
+    <KeyboardAvoidingViewContainer>
+      <SectionContainer>
+        <View style={styles.header}>
+          <View style={styles.iconWrapper}>
+            <Text style={styles.icon}>{watch('icon') ? watch('icon') : '🙏'}</Text>      
+          </View>
+        </View>
+        <Divider />
+        <Margin space={16} />
+        <View style={styles.textInputWrapper}>
+          <Controller
+            name="icon"
+            control={control}
+            rules={{
+              required: true,
+              maxLength: {
+                value: 3,
+                message: '아이콘은 하나만 선택해주세요'
+              }
             }}
-            onEndEditing={() => {
-              setCreateRoutine({
-                ...createRoutine,
-                icon: icon.trim(),
-              });
-            }}
-            style={styles.textInput}
-            placeholderTextColor={OpenColor.gray[4]}
-            maxLength={2}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                returnKeyType="done"
+                autoCapitalize="none"
+                selectionColor={OpenColor.blue[6]}
+                style={styles.textInput}
+                placeholder="아이콘을 입력해보세요"
+                placeholderTextColor={OpenColor.gray[5]}
+                inputMode='text'
+              />
+            )}
           />
         </View>
-      </TouchableWithoutFeedback>
-    </>
+        <Margin space={4} />
+        {errors.icon && <ErrorText>{errors.icon.message}</ErrorText>}
+        <Margin space={24} />
+        <Button
+          label="확인"
+          onPress={onSaveHandler}
+          disabled={watch("icon") === "" || errors.icon !== undefined}
+        />
+      </SectionContainer>
+    </KeyboardAvoidingViewContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  iconWrapper: {
+    width: 52,
+    height: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: OpenColor.gray[4],
+    borderRadius: 12,
+    marginRight: 16,
+  },
+  icon: {
+    fontSize: 24,
+  },
+  textInputWrapper: {
+    position: 'relative',
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    backgroundColor: OpenColor.white,
+  },
   textInput: {
     width: '100%',
-    height: 40,
-    backgroundColor: OpenColor.white,
     fontSize: FONT_SIZE.BODY,
     fontWeight: '400',
+    color: OpenColor.black,
     letterSpacing: 1.3,
     textAlign: 'center',
-    borderRadius: 8,
     padding: 0,
+    margin: 0,
   },
 });
 

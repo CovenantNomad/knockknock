@@ -574,3 +574,48 @@ export const getMonthlyTrends = async (
     thisYearMonthResults,
   };
 };
+
+export const getRoutinesWithNotification = async (uid: string) => {
+  const routinesRef = firestore()
+    .collection(COLLCTION.USERS)
+    .doc(uid)
+    .collection(COLLCTION.MYROUTINES)
+    .where('isActive', '==', true)
+    .where('hasNotification', '==', true);
+
+  try {
+    const routinesResponse = await routinesRef.get();
+    routinesResponse.forEach(async (doc) => {
+      await doc.ref.update({
+        hasNotification: false,
+        notificationIds: []
+      })
+
+      Array.from({ length: 14 }).map(async (_, i) => {
+        let date = dayjs(dayjs()).subtract(i, 'day');
+        let dayRef = firestore()
+          .collection(COLLCTION.USERS)
+          .doc(uid)
+          .collection(COLLCTION.DAYS)
+          .doc(date.format('YY-MM-DD'))
+          .collection(COLLCTION.ROUTINES)
+          .doc(doc.id);
+        if ((await dayRef.get()).exists) {
+          await dayRef.update({
+            hasNotification: false,
+            notificationIds: []
+          });
+        }
+      });
+    });
+    
+    return {
+      result: true,
+    }
+  } catch {
+    return {
+      result: false,
+      message: "서버에서 알람설정을 해제하지 못했습니다"
+    }
+  }
+}

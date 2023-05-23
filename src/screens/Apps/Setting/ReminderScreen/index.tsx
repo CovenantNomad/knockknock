@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //navigation
 import { useNavigation } from '@react-navigation/native';
@@ -15,20 +15,55 @@ import Margin from '@/components/Atoms/Margin';
 //styles
 import { FONT_SIZE, LINE_HEIGHT } from '@/styles/font';
 import OpenColor from 'open-color';
+import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
+import AuthContext from '@/stores/AuthContext';
+import AuthProvider from '@/stores/AuthProvider';
+import { getRoutinesWithNotification } from '@/api/routine';
+import { useMutation, useQueryClient } from 'react-query';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import Button from '@/components/Atoms/Button';
 
 interface ReminderScreenProps {}
 
 const ReminderScreen = ({}: ReminderScreenProps) => {
-  const { loadReminders, removeAllReminder } = useReminer();
+  const queryClient = useQueryClient();
+  const { userInfo } = useContext(AuthContext);
+  const { removeAllReminder, loadReminders } = useReminer();
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingStackParamList>>();
 
+  const { mutateAsync } = useMutation(getRoutinesWithNotification, {
+    onSettled(data, error, variables) {
+      queryClient.invalidateQueries({ queryKey: ['getRoutinesByDay'] });
+      queryClient.invalidateQueries({ queryKey: ['getRoutines'] });
+    },
+  });
+
+  const onClickHandler = async () => {
+    if (userInfo) {
+      const result = await mutateAsync(userInfo.uid)
+      if (result) {
+        await removeAllReminder()
+        Toast.show({
+          type: 'success',
+          text1: '모든 알람설정을 해제했습니다',
+          visibilityTime: 2000,
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: '서버에서 알람설정을 해제하지 못했습니다',
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     (async () => {
-      const notifications = await loadReminders();
-      console.log(notifications);
-    })();
-  }, []);
+      const reminder = await loadReminders() 
+      console.log(userInfo?.username, reminder)
+    })()
+  }, [])
 
   return (
     <AppLayout>
@@ -39,15 +74,7 @@ const ReminderScreen = ({}: ReminderScreenProps) => {
       </Header>
       <Margin space={16} />
       <ScrollViewContainer>
-        <Text
-          style={{
-            fontSize: FONT_SIZE.CALLOUT,
-            lineHeight: LINE_HEIGHT.CALLOUT,
-            color: OpenColor.black,
-          }}
-        >
-          전체 알람 해제
-        </Text>
+        <SectionTitleText text='전체 알람 해제' />
         <Margin space={12} />
         <Text
           style={{
@@ -58,11 +85,12 @@ const ReminderScreen = ({}: ReminderScreenProps) => {
         >
           {`오류로 인해 불필요한 알람이 생성되었다면 모든 알람을 삭제하고 다시 루틴별로 재설정해 주시기 바랍니다.\n불편을 드려서 죄송합니다.`}
         </Text>
-        <Margin space={16} />
+        <Margin space={32} />
         <View>
-          <TouchableOpacity onPress={async () => await removeAllReminder()}>
-            <Text>전체알람 해제</Text>
-          </TouchableOpacity>
+          <Button 
+            label='전체알람 해제'
+            onPress={onClickHandler}
+          />
         </View>
       </ScrollViewContainer>
     </AppLayout>

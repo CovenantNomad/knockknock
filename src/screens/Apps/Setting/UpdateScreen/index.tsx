@@ -7,6 +7,7 @@ import { SettingStackParamList } from '@/types/navigations/navigationTypes';
 //styles
 import { FONT_SIZE, LINE_HEIGHT } from '@/styles/font';
 import OpenColor from 'open-color';
+import { version } from '../../../../../package.json';
 //components
 import Header from '@/components/Atoms/Header/Header';
 import HeaderLeft from '@/components/Atoms/Header/HeaderLeft';
@@ -16,6 +17,8 @@ import Margin from '@/components/Atoms/Margin';
 import useCodePush from '@/hooks/useCodePush';
 import Button from '@/components/Atoms/Button';
 import LoadingBar from '@/components/Atoms/LoadingBar';
+import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
+import Paragraph from '@/components/Atoms/Typography/Paragraph';
 
 interface UpdateScreenProps {}
 
@@ -33,27 +36,29 @@ const UpdateScreen = ({}: UpdateScreenProps) => {
       </Header>
       <Margin space={24} />
       <ScrollViewContainer>
-        <Text
-          style={{
-            fontSize: FONT_SIZE.CALLOUT,
-            lineHeight: LINE_HEIGHT.CALLOUT,
-            color: OpenColor.black,
-          }}
-        >
-          업데이트 정보
-        </Text>
+        <SectionTitleText text='업데이트 정보' />
         <Margin space={16} />
-        <Text
-          style={{
-            fontSize: FONT_SIZE.BODY,
-            lineHeight: LINE_HEIGHT.BODY,
-            color: OpenColor.black,
-          }}
-        >
-          {updateAvailable
-            ? '업데이트 내용이 있습니다\n업데이트를 통해 앱을 최신의 상태로 유지해주세요'
-            : '현재 최신버전의 상태입니다'}
-        </Text>
+        <View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Paragraph>현재버전</Paragraph>
+            <Paragraph>{version}</Paragraph>
+          </View>
+        </View>
+        <Margin space={24} />
+        <View style={{alignItems: 'center'}}>
+          <Text
+            style={{
+              fontSize: FONT_SIZE.BODY,
+              lineHeight: LINE_HEIGHT.BODY,
+              color: OpenColor.black,
+              textAlign: 'center',
+            }}
+          >
+            {updateAvailable
+              ? '업데이트 내용이 있습니다\n최신 버전을 확인해주세요'
+              : '현재 최신버전의 상태입니다'}
+          </Text>
+        </View>
         <Margin space={36} />
         {updateAvailable && (
           <View style={{ width: '50%', alignSelf: 'center' }}>

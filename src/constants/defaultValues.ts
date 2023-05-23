@@ -2,7 +2,7 @@ export const WEEKDAYS = [
   {
     id: 0,
     title: '일',
-    selected: true,
+    selected: false,
   },
   {
     id: 1,
@@ -32,7 +32,7 @@ export const WEEKDAYS = [
   {
     id: 6,
     title: '토',
-    selected: true,
+    selected: false,
   },
 ];
 

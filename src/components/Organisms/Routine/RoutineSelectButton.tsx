@@ -7,6 +7,7 @@ import { Switch } from 'react-native';
 interface RoutineSelectButtonProps {
   title: string;
   buttonLabel: string;
+  bgColor?: string;
   tooltipText?: string;
   disabled?: boolean;
   onPress: () => void;
@@ -14,8 +15,9 @@ interface RoutineSelectButtonProps {
 
 const RoutineSelectButton = ({
   title,
-  tooltipText,
   buttonLabel,
+  bgColor,
+  tooltipText,
   disabled,
   onPress,
 }: RoutineSelectButtonProps) => {
@@ -25,8 +27,9 @@ const RoutineSelectButton = ({
       <Margin space={12} />
       <NavigationButton
         label={buttonLabel}
-        onPress={onPress}
+        bgColor={bgColor}
         disabled={disabled}
+        onPress={onPress}
       />
       <Margin space={24} />
     </>

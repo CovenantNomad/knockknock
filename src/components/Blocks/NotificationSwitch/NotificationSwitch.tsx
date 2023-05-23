@@ -30,9 +30,11 @@ const NotificationSwitch = ({
           value={value}
           disabled={disabled}
           onValueChange={onChange}
-          trackColor={{ false: '#767577', true: '#B0D2D4' }}
-          thumbColor={'#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
+          // trackColor={{ false: '#767577', true: '#B0D2D4' }}
+          // thumbColor={disabled ? OpenColor.gray[5] : '#f4f3f4'}
+          trackColor={{ false: OpenColor.gray[3], true: '#B0D2D4' }}
+          thumbColor={disabled ? OpenColor.gray[6] : '#f4f3f4'}
+          ios_backgroundColor={disabled ? OpenColor.gray[3] : OpenColor.gray[3]}
         />
       </View>
     </>

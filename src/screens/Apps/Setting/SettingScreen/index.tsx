@@ -29,11 +29,7 @@ const SettingScreen = ({}: SettingScreenProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingStackParamList>>();
   const { userInfo, signOut } = useContext(AuthContext);
-  const { checkUpdateApp, updateAvailable } = useCodePush();
-
-  useEffect(() => {
-    checkUpdateApp();
-  }, []);
+  const { updateAvailable } = useCodePush();
 
   return (
     <AppLayout backgroundColor={OpenColor.white}>

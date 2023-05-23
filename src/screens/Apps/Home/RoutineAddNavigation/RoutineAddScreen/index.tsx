@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Keyboard } from 'react-native';
 //navigation
 import { useNavigation } from '@react-navigation/native';
@@ -23,9 +23,9 @@ const RoutineAddScreen = () => {
   const queryClient = useQueryClient();
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
-  const [icon, setIcon] = useState<string>('');
-  const { setCreateRoutine, onCreateRoutine } = useRoutines();
   const createRoutine = useRecoilValue(createRoutineState);
+  const { setCreateRoutine, onCreateRoutine } = useRoutines();
+  
 
   const { mutateAsync: createRoutineMutation } = useMutation(
     createRoutineFirebase,
@@ -40,7 +40,6 @@ const RoutineAddScreen = () => {
   );
 
   const onSaveHandler = async () => {
-    Keyboard.dismiss();
     if (createRoutine.name === '') {
       Toast.show({
         type: 'error',
@@ -68,8 +67,13 @@ const RoutineAddScreen = () => {
           visibilityTime: 2000,
         });
         setCreateRoutine(DEFAULTROUTINE);
-        setIcon('');
       }
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: '새로운 루틴을 생성하지 못했습니다.',
+        visibilityTime: 2000,
+      });
     }
   };
 
@@ -87,8 +91,6 @@ const RoutineAddScreen = () => {
         }
       />
       <NewRoutineTemplate
-        icon={icon}
-        setIcon={setIcon}
         onSaveHandler={onSaveHandler}
       />
     </AppLayout>

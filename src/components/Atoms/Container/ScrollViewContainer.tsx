@@ -13,6 +13,7 @@ const ScrollViewContainer = ({ children }: ScrollViewContainerProps) => {
     <ScrollView
       style={[styles.container, { paddingBottom: tabBarHeight }]}
       showsVerticalScrollIndicator={false}
+      overScrollMode='always'
     >
       {children}
     </ScrollView>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CodePush, { DownloadProgress } from 'react-native-code-push';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
@@ -39,6 +39,10 @@ const useCodePush = () => {
         visibilityTime: 2000,
       });
     }
+  }, []);
+
+  useEffect(() => {
+    checkUpdateApp();
   }, []);
 
   return {

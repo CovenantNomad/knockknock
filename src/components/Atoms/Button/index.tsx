@@ -23,7 +23,7 @@ const Button: React.FC<{
         styles.button,
         {
           backgroundColor: props.disabled
-            ? OpenColor.gray[6]
+            ? OpenColor.gray[4]
             : props.backgroundColor || OpenColor.blue[6],
           borderRadius: props.rounded ? 12 : 0,
         },

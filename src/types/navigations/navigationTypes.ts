@@ -42,6 +42,8 @@ export type SettingStackParamList = {
 
 export type RoutineAddStackParamList = {
   RoutineAddMain: undefined;
+  RoutineAddName: undefined;
+  RoutineAddIcon: undefined;
   RoutineAddColor: undefined;
 };
 
@@ -54,5 +56,7 @@ export type RoutineDetailStackParamList = {
     routine: FirebaseDailyRoutineType;
     previousRoute: string;
   };
+  RoutineEditName: undefined;
+  RoutineEditIcon: undefined;
   RoutineEditColor: undefined;
 };

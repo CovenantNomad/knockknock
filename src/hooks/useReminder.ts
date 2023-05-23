@@ -127,8 +127,7 @@ const useReminer = () => {
             android: {
               channelId: channelId,
               pressAction: {
-                id: 'App-Open',
-                launchActivity: 'com.covenantnomad.knockknock.MainActivity',
+                id: 'default',
               },
             },
             data: {

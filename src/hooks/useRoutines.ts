@@ -69,10 +69,6 @@ const useRoutines = () => {
       if (saveData !== null) {
         return saveData;
       } else {
-        Toast.show({
-          type: 'error',
-          text1: '새로운 루틴을 생성하지 못했습니다.',
-        });
         return null;
       }
     } else {

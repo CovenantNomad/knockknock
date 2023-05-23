@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -13,25 +13,19 @@ import useDateTimePicker from '@/hooks/useDateTimePicker';
 import ScrollViewContainer from '@components/Atoms/Container/ScrollViewContainer';
 import HeadlineText from '@components/Atoms/Typography/HeadlineText';
 import Margin from '@components/Atoms/Margin';
-import RoutineNameCard from '@components/Organisms/Routine/RoutineNameCard';
-import KeyboardAvoidingViewContainer from '@/components/Atoms/Container/KeyboardAvoidingViewLayout';
 import SectionTitleText from '@/components/Atoms/Typography/SectionTitle';
 import RoutineWeekdaySelect from '@/components/Organisms/Routine/RoutineWeekdaySelect';
 import RoutineSelectButton from '@/components/Organisms/Routine/RoutineSelectButton';
 import RoutineIconInput from '@/components/Organisms/Routine/RoutineIconInput';
 import NotificationSwitch from '@/components/Blocks/NotificationSwitch/NotificationSwitch';
-import Footer from '@/components/Atoms/Footer/Footer';
 import Button from '@/components/Atoms/Button';
+import OpenColor from 'open-color';
 
 interface NewRoutineTemplateProps {
-  icon: string;
-  setIcon: Dispatch<SetStateAction<string>>;
   onSaveHandler: () => void;
 }
 
 const NewRoutineTemplate = ({
-  icon,
-  setIcon,
   onSaveHandler,
 }: NewRoutineTemplateProps) => {
   const navigation =
@@ -61,64 +55,73 @@ const NewRoutineTemplate = ({
 
   return (
     <ScrollViewContainer>
-      <KeyboardAvoidingViewContainer>
-        <HeadlineText text={'새로운 영적루틴'} />
-        <Margin space={24} />
-        <RoutineNameCard />
-        <Margin space={24} />
-        <RoutineIconInput title="Icon" icon={icon} setIcon={setIcon} />
-        <Margin space={24} />
-        <RoutineSelectButton
-          title={'Color'}
-          buttonLabel={createRoutine.color || '선택'}
-          onPress={() => navigation.navigate('RoutineAddColor')}
-        />
-        <SectionTitleText text={'Weekdays'} />
-        <Margin space={12} />
-        <RoutineWeekdaySelect
-          routine={createRoutine}
-          setRoutine={setCreateRoutine}
-        />
-        <Margin space={24} />
-        <RoutineSelectButton
-          title={'Time'}
-          buttonLabel={
-            createRoutine.hour !== '' && createRoutine.minute !== ''
-              ? `${createRoutine.hour}:${createRoutine.minute}`
-              : '선택'
-          }
-          onPress={showDatePicker}
-        />
-        <NotificationSwitch
-          title={'Notification'}
-          tooltipText={'이름, 요일, 시간 설정시 알람설정 가능'}
-          value={createRoutine.hasNotification}
-          disabled={
-            createRoutine.weekday.filter(item => item.selected === true)
-              .length === 0 ||
-            createRoutine.hour === null ||
-            createRoutine.minute === null ||
-            createRoutine.name === ''
-          }
-          onChange={onToggelHandler}
-        />
-        <Margin space={36} />
-        <Button
-          label="저장"
-          onPress={onSaveHandler}
-          disabled={createRoutine.name === '' || createRoutine.hour === ''}
-        />
-        <Margin space={16} />
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="time"
-          date={date}
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-          timePickerModeAndroid={'spinner'}
-          is24Hour={true}
-        />
-      </KeyboardAvoidingViewContainer>
+      <HeadlineText text={'새로운 영적루틴'} />
+      <Margin space={24} />
+      <RoutineSelectButton
+        title={'이름'}
+        buttonLabel={createRoutine.name || '입력'}
+        onPress={() => navigation.navigate('RoutineAddName')}
+      />
+      <Margin space={16} />
+      <RoutineSelectButton
+        title={'아이콘'}
+        buttonLabel={createRoutine.icon || '입력'}
+        onPress={() => navigation.navigate('RoutineAddIcon')}
+      />
+      <Margin space={16} />
+      <RoutineSelectButton
+        title={'태그 색상'}
+        buttonLabel={createRoutine.color || '선택'}
+        bgColor={createRoutine.color || OpenColor.white}
+        onPress={() => navigation.navigate('RoutineAddColor')}
+      />
+      <Margin space={16} />
+      <SectionTitleText text={'반복'} />
+      <Margin space={12} />
+      <RoutineWeekdaySelect
+        routine={createRoutine}
+        setRoutine={setCreateRoutine}
+      />
+      <Margin space={28} />
+      <RoutineSelectButton
+        title={'약속시간'}
+        buttonLabel={
+          createRoutine.hour !== '' && createRoutine.minute !== ''
+            ? `${createRoutine.hour}:${createRoutine.minute}`
+            : '선택'
+        }
+        onPress={showDatePicker}
+      />
+      <Margin space={16} />
+      <NotificationSwitch
+        title={'알람'}
+        tooltipText={'이름, 요일, 시간을 설정하면 알람기능 활성화'}
+        value={createRoutine.hasNotification}
+        disabled={
+          createRoutine.weekday.filter(item => item.selected === true)
+            .length === 0 ||
+          createRoutine.hour === null ||
+          createRoutine.minute === null ||
+          createRoutine.name === ''
+        }
+        onChange={onToggelHandler}
+      />
+      <Margin space={36} />
+      <Button
+        label="저장"
+        onPress={onSaveHandler}
+        disabled={createRoutine.name === '' || createRoutine.hour === ''}
+      />
+      <Margin space={16} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="time"
+        date={date}
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        timePickerModeAndroid={'spinner'}
+        is24Hour={true}
+      />
     </ScrollViewContainer>
   );
 };
